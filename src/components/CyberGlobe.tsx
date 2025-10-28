@@ -39,7 +39,7 @@ function latLonToVector3(lat: number, lon: number, radius: number) {
 function Globe() {
   const meshRef = useRef<THREE.Mesh>(null);
   
-  useFrame((state) => {
+  useFrame(() => {
     if (meshRef.current) {
       meshRef.current.rotation.y += 0.001;
     }
@@ -99,6 +99,7 @@ function Arc({ start, end, color }: { start: THREE.Vector3; end: THREE.Vector3; 
     return points;
   }, [start, end]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lineRef = useRef<any>(null);
   
   useFrame((state) => {

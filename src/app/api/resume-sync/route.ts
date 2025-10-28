@@ -107,7 +107,7 @@ async function downloadResume(downloadUrl: string, filename: string): Promise<bo
 }
 
 // GET: Check for updates
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const fileData = await getResumeFromGitHub();
 
@@ -221,7 +221,7 @@ export async function POST(request: NextRequest) {
 }
 
 // OPTIONS: CORS preflight
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 204,
     headers: {

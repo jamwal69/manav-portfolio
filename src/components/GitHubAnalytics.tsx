@@ -44,7 +44,9 @@ export default function GitHubAnalytics() {
         const reposData = await reposResponse.json();
 
         // Calculate total stars and forks
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const totalStars = reposData.reduce((sum: number, repo: any) => sum + repo.stargazers_count, 0);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const totalForks = reposData.reduce((sum: number, repo: any) => sum + repo.forks_count, 0);
 
         setStats({
@@ -58,8 +60,10 @@ export default function GitHubAnalytics() {
 
         // Get top repositories
         const topRepos = reposData
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .sort((a: any, b: any) => b.stargazers_count - a.stargazers_count)
           .slice(0, 5)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .map((repo: any) => ({
             name: repo.name,
             description: repo.description || 'No description',
