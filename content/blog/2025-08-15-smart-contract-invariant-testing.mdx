@@ -1,0 +1,74 @@
+---
+title: "Smart Contract Invariant Testing: Catching Logic Drift Before Audit"
+slug: smart-contract-invariant-testing
+summary: "How I use property-based fuzzing + invariants to surface re-entrancy, balance inconsistencies & auth flaws early."
+date: "2025-08-15"
+tags: [blockchain, security, fuzzing, invariants]
+status: published
+reviewers: [security.team@example.com]
+---
+
+## Context
+Pre-audit solidity code often hides subtle state drifts: token supply mismatches, privileged function exposure paths, or re-entrancy side effects that unit tests miss because they assert expected path not forbidden states.
+
+## Goal
+Establish a fast, repeatable invariant harness that fails within minutes if core economic or access assumptions break while features evolve.
+
+## Core Invariants Tracked
+- Total supply never exceeds cap.
+- Sum(user balances) == totalSupply (post-fee rounding tolerances handled).
+- No address besides `owner` / designated roles can mutate critical parameters.
+- Re-entrancy guard prevents nested external call impact on balance snapshots.
+- Paused state forbids transfers / emissions.
+
+## Tooling Stack
+| Layer | Tool | Purpose |
+|-------|------|---------|
+| Fuzz Engine | Foundry (forge) | Property-based random sequence gen |
+| Static | Slither | Pattern detection & upgradeability smell checks |
+| Differential | Custom Go harness | Compare expected vs actual state deltas across tx batches |
+| Coverage | forge coverage | Ensure fuzz seeds hit modifier branches |
+
+## Minimal Harness Snippet (Foundry)
+```solidity
+contract TokenInvariants is Test {
+    Token token;
+    address user1 = address(0x1);
+    address user2 = address(0x2);
+
+    function setUp() public {
+        token = new Token();
+        targetContract(address(token));
+    }
+
+    function invariant_totalSupplyMatchesBalances() public {
+        uint256 sum;
+        for (uint i; i < 10; i++) { // sample holder set
+            sum += token.balanceOf(address(uint160(i+1)));
+        }
+        assertEq(sum, token.totalSupply());
+    }
+}
+```
+(Real version enumerates dynamic holder sets via events + a balance snapshot map.)
+
+## Fast Failure Loop
+1. Run invariants locally on each feature branch (forge test -match Invariant -vvvv).
+2. If failure: capture sequence seed + generated call series.
+3. Replay deterministically -> patch bug.
+4. Re-run full invariant pack + static Slither scan.
+
+## Example Caught Issues
+- Improper fee accumulation rounding -> supply drift after 50k random transfers.
+- Missing onlyOwner on emergencyWithdraw.
+- Re-entrancy vulnerability in reward claim before guard inserted.
+
+## Impact
+Reduced external audit critical findings to zero in last engagement; mean time to surface regressions < 5 minutes.
+
+---
+Reviewer checklist:
+- [ ] Technical accuracy
+- [ ] No sensitive / proprietary code
+- [ ] Clear impact paragraph
+- [ ] Consistent tag usage

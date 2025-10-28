@@ -1,0 +1,65 @@
+---
+title: "Android Malware: Rapid Encrypted Config Extraction"
+slug: android-encrypted-config
+summary: Workflow to surface and decode encrypted C2/config blobs in packed Android samples fast.
+date: "2025-08-12"
+tags: [android, malware, reverse-engineering, frida]
+status: published
+mitre: [T1404, T1412]
+tools: [apktool, jadx, frida, mobsf]
+reviewers: [your.email@example.com]
+---
+
+## Objective
+Identify and decode encrypted configuration (C2 endpoints, campaign IDs, feature flags) in an obfuscated APK within minutes.
+
+## High-Level Steps
+1. Manifest + string surface triage.
+2. Static pattern spotting (AES keys, base64 loops, native loader).
+3. Dynamic hook pack (crypto, prefs, network) with Frida.
+4. Config blob extraction + quick decoder.
+5. Hash + IOC snapshot for intelligence reuse.
+
+## Fast Manifest & Surface
+```
+apktool d sample.apk -o sample_src
+grep -R "Base64" -n sample_src/smali | head
+```
+Focus on:
+- Exported receivers/services (potential C2 triggers).
+- Custom Application subclass (initializers, key loaders).
+
+## Frida Hook Seed
+```javascript
+Java.perform(()=>{
+  const Cipher = Java.use('javax.crypto.Cipher');
+  Cipher.doFinal.overload('[B').implementation=function(b){
+    const out = this.doFinal.overload('[B').call(this,b);
+    send({stage:'decrypt', in: b?.length, out: out?.length});
+    return out;
+  };
+});
+```
+Persist output -> diff multiple sample variants.
+
+## Decoder Skeleton
+```python
+import base64, json
+raw = open('blob.bin','rb').read()
+# heuristic: base64 then JSON
+try:
+  data = json.loads(base64.b64decode(raw))
+  print(data)
+except Exception as e:
+  print('fallback needed', e)
+```
+
+## Indicators
+(placeholder – fill after real run)
+
+---
+Reviewer checklist:
+- [ ] Technical accuracy
+- [ ] No sensitive data
+- [ ] Clear impact paragraph
+- [ ] Consistent tag usage
