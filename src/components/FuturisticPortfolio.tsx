@@ -28,11 +28,8 @@ import InteractiveCyberTerminal from './InteractiveCyberTerminal';
 import LoadingScreen from './LoadingScreen';
 import ThemeToggle from './ThemeToggle';
 import ContactForm from './ContactForm';
+import AIResumeAssistant from './AIResumeAssistant';
 import ResumeViewer from './ResumeViewer';
-import CyberGlobe from './CyberGlobe';
-import GitHubAnalytics from './GitHubAnalytics';
-import PentestingSandbox from './PentestingSandbox';
-import CyberMascot from './CyberMascot';
 import AnimatedCharacters from './AnimatedCharacters';
 
 // Lazy load heavy 3D scene client-side only with richer placeholder
@@ -211,7 +208,7 @@ export default function FuturisticPortfolio() {
       {/* Main Portfolio */}
       {!showBootSequence && (
         <div className="min-h-screen transition-colors duration-500 day-mode:bg-white day-mode:text-gray-900 night-mode:bg-slate-900 night-mode:text-white">
-          {/* Animated Characters - floating around the page */}
+          {/* Animated Characters */}
           <AnimatedCharacters />
           
           {/* Loading Screen */}
@@ -257,29 +254,24 @@ export default function FuturisticPortfolio() {
       </motion.nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative pt-20">
+      <section id="home" className="min-h-screen flex items-center justify-center relative">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/50" />
         
         {/* TryHackMe Badge - Floating */}
-        <div className="absolute top-20 right-6 w-56 h-56 hidden lg:block z-20">
+        <div className="absolute top-24 right-6 w-56 h-56 hidden lg:block z-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.8, x: 50 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
             className="w-full h-full"
           >
-            <a
-              href="https://tryhackme.com/p/jamwal"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full h-full rounded-xl overflow-hidden border-2 border-cyan-400/50 bg-slate-900/30 backdrop-blur-sm shadow-2xl shadow-cyan-500/30 hover:border-cyan-400 hover:shadow-cyan-500/50 transition-all"
-            >
-              <iframe
-                src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4190234"
-                style={{ border: 'none', width: '100%', height: '100%' }}
-                title="TryHackMe Badge"
-              />
-            </a>
+            <iframe
+              src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4190234"
+              title="TryHackMe Badge"
+              loading="lazy"
+              className="w-full h-full rounded-xl border-2 border-cyan-400/50 bg-slate-900/80 backdrop-blur-sm shadow-2xl shadow-cyan-500/20"
+              style={{ border: 'none' }}
+            />
           </motion.div>
         </div>
         
@@ -291,7 +283,7 @@ export default function FuturisticPortfolio() {
             className="space-y-8"
           >
             <motion.h1
-              className="text-6xl md:text-8xl font-extrabold mb-6 tracking-tight"
+              className="pt-14 text-6xl md:text-8xl font-extrabold mb-6 tracking-tight"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
@@ -430,79 +422,6 @@ export default function FuturisticPortfolio() {
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* GitHub Analytics Section */}
-      <section className="py-20 relative overflow-hidden day-mode:bg-white">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 to-black day-mode:from-white day-mode:to-slate-100" />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-cyan-400 day-mode:text-slate-800">Live Development Activity</h2>
-            <p className="text-xl text-slate-300 day-mode:text-slate-600 max-w-3xl mx-auto">Real-time GitHub analytics showcasing open-source contributions, repository metrics, and development momentum.</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <GitHubAnalytics />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Pentesting Sandbox Section */}
-      <section className="py-20 relative overflow-hidden day-mode:bg-slate-50">
-        <div className="absolute inset-0 bg-gradient-to-b from-black to-slate-900 day-mode:from-slate-100 day-mode:to-white" />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-cyan-400 day-mode:text-slate-800">Security Research Lab</h2>
-            <p className="text-xl text-slate-300 day-mode:text-slate-600 max-w-3xl mx-auto">Interactive demonstrations of common web vulnerabilities and their mitigations. Authorized testing environment for educational purposes.</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-          >
-            <PentestingSandbox />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 3D Cyber Globe Visualization */}
-      <section className="py-20 relative overflow-hidden day-mode:bg-white">
-        <div className="absolute inset-0 bg-gradient-to-b from-black to-slate-900 day-mode:from-slate-50 day-mode:to-white" />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-cyan-400 day-mode:text-slate-800">Global Operations Network</h2>
-            <p className="text-xl text-slate-300 day-mode:text-slate-600 max-w-3xl mx-auto">Real-time visualization of international projects, security research, and threat monitoring across global infrastructure.</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className="h-[600px] rounded-xl overflow-hidden glass border border-cyan-400"
-          >
-            <CyberGlobe />
-          </motion.div>
         </div>
       </section>
 
@@ -1020,6 +939,11 @@ export default function FuturisticPortfolio() {
         </div>
       </section>
 
+  {/* Chatbot removed */}
+
+  {/* AI Resume Assistant */}
+  <AIResumeAssistant />
+
   {/* Resume Viewer */}
   <ResumeViewer isOpen={showResumeViewer} onClose={() => setShowResumeViewer(false)} />
 
@@ -1062,8 +986,7 @@ export default function FuturisticPortfolio() {
         </div>
       )}
       
-      {/* Unified Cyber Mascot - AI Chat + Terminal Interface */}
-      <CyberMascot />
+  {/* Chatbot removed */}
     </>
   );
 }
