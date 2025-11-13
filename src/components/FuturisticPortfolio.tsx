@@ -33,6 +33,7 @@ import CyberGlobe from './CyberGlobe';
 import GitHubAnalytics from './GitHubAnalytics';
 import PentestingSandbox from './PentestingSandbox';
 import CyberMascot from './CyberMascot';
+import AnimatedCharacters from './AnimatedCharacters';
 
 // Lazy load heavy 3D scene client-side only with richer placeholder
 const CyberpunkScene3D = dynamic(() => import('./CyberpunkScene3D'), { 
@@ -210,6 +211,9 @@ export default function FuturisticPortfolio() {
       {/* Main Portfolio */}
       {!showBootSequence && (
         <div className="min-h-screen transition-colors duration-500 day-mode:bg-white day-mode:text-gray-900 night-mode:bg-slate-900 night-mode:text-white">
+          {/* Animated Characters - floating around the page */}
+          <AnimatedCharacters />
+          
           {/* Loading Screen */}
           <LoadingScreen />
 
